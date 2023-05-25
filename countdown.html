@@ -16,50 +16,68 @@
     <div id="countdown"></div>
 
     <script>
+      // Created functions to keep the code clean and use DRY Principal and also DOESN'T EFFECT THE PERFORMANCE
+      // Function to get an element by its ID
       const getElement = (id) => document.getElementById(id);
+
+      // Function to hide an element
       const hideElement = (element) => (element.style.display = "none");
+
+      // Function to show an element
       const showElement = (element) => (element.style.display = "block");
+
+      // Function to set the text content of an element
       const setElementText = (element, text) => (element.textContent = text);
 
+      // Add event listener to the "Start Countdown" button
       getElement("start-countdown-btn").addEventListener(
         "click",
         startCountdown
       );
 
+      // Function to start the countdown
       function startCountdown() {
-        const { countdownContainer, countdownInput } = getElementIds(
-          "countdown-container",
-          "countdown-input"
-        );
+        const countdownContainer = getElement("countdown-container");
+        const countdownInput = getElement("countdown-input");
 
         const countdownDate = new Date(countdownInput.value).getTime();
+
+        // Check if the entered date is valid
         if (isNaN(countdownDate) || countdownDate <= Date.now()) {
           alert("Invalid date and time");
           return;
         }
 
+        // Hide the countdown container
         hideElement(countdownContainer);
+
+        // Show the countdown initially
         showCountdown();
 
+        // Interval function to update the countdown every second
         const countdown = setInterval(() => {
           showCountdown();
 
+          // Check if the countdown is complete
           if (countdownDate <= Date.now()) {
             clearInterval(countdown);
             setElementText(getElement("countdown"), "Countdown Complete!");
             showElement(countdownContainer);
+
+            // Clear the countdown text after 3 seconds
             setTimeout(() => setElementText(getElement("countdown"), ""), 3000);
           }
         }, 1000);
       }
 
+      // Function to update and display the countdown
       function showCountdown() {
-        const countdownDate = new Date(
-          getElement("countdown-input").value
-        ).getTime();
+        const countdownInput = getElement("countdown-input");
+        const countdownDate = new Date(countdownInput.value).getTime();
         const currentTime = Date.now();
         let timeRemaining = (countdownDate - currentTime) / 1000;
 
+        // Calculate the remaining time in days, hours, minutes, and seconds
         const [days, hours, minutes, seconds] = [
           Math.floor(timeRemaining / 86400),
           Math.floor((timeRemaining % 86400) / 3600),
@@ -67,9 +85,14 @@
           Math.ceil(timeRemaining % 60),
         ];
 
+        // Update the countdown text with leading zeros for two digits
         setElementText(
           getElement("countdown"),
-          `${days}d ${hours}h ${minutes}m ${seconds}s`
+          `${days.toString().padStart(2, "0")}d ${hours
+            .toString()
+            .padStart(2, "0")}h ${minutes
+            .toString()
+            .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`
         );
       }
     </script>
