@@ -78,7 +78,7 @@
           Math.floor(timeRemaining / 86400),
           Math.floor((timeRemaining % 86400) / 3600),
           Math.floor((timeRemaining % 3600) / 60),
-          Math.ceil(timeRemaining % 60),
+          Math.floor(timeRemaining % 60), // Use Math.floor instead of Math.ceil
         ];
 
         // Update the countdown text with leading zeros for two digits
